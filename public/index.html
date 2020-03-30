@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Let's lie to each other!!!</title>
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.4.1/css/bootstrap.css">
+    <link rel="stylesheet" href="/style.css">
+</head>
+
+<body>
+<header class="navbar navbar-expand navbar-dark flex-column flex-md-row bd-navbar">
+    <nav>
+        <div class="nav-wrapper">
+            <a href="/" class="brand-logo">&nbsp;Let's lie to each other</a>
+        </div>
+    </nav>
+</header>
+
+<main id="app">
+
+    <div class="container">
+        <div class="row" v-if="joined">
+            <template v-if="judge === ''">
+                <div class="col-12">
+                    <button @click="becomeJudge">My turn to judge</button>
+                </div>
+            </template>
+            <template v-else>
+                <template v-if="judge === name">
+                    <div class="col-12">
+                        <h1>You are the judge!</h1>
+                        <p>What is everyone lying about?</p>
+                        <input type="text" v-model="secret" />
+                        <p>What is the real definition?</p>
+                        <textarea v-model="definition">
+
+                        </textarea>
+                        <ul>
+                            <li v-for="(definition, name) in definitions" class="{correct: name == judge}">
+                                {{ name }}:
+                                {{ definition }}
+                            </li>
+                        </ul>
+                        <button @click="shuffle">Shuffle</button>
+                        <button @click="doneJudging">I'm done judging</button>
+                    </div>
+                </template>
+                <template v-else>
+                    <div class="col-12">
+                        <p v-if="judge">Judge: {{ judge }}</p>
+                        <h1>What is your definition for: {{secret}}</h1>
+                        <textarea v-model="definition"></textarea>
+                    </div>
+                </template>
+            </template>
+        </div>
+
+        <div class="row join-form" v-if="!joined">
+            <div class="col-12">
+                <div class="input-field col">
+                    <p>Who are you?</p>
+                </div>
+                <div class="input-field col">
+                    <input type="text" v-model.trim="name" placeholder="Your Name">
+                </div>
+                <div class="text-center pt-5">
+                    <button class="btn btn-primary" @click="join()">Join</button>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</main>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/vue/2.6.11/vue.js"></script>
+<script src="/app.js"></script>
+</body>
+</html>
