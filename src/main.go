@@ -77,6 +77,9 @@ func handleMessages() {
 		if msg.Type == "judge" {
 			sendToAll("judge", msg.IncomingString)
 		}
+		if msg.Type == "type" {
+			sendToAll("type", msg.IncomingString)
+		}
 		if msg.Type == "definition" {
 			sendToAll("definition", map[string]string{
 				"name":       msg.Name,

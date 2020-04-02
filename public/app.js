@@ -7,6 +7,7 @@ new Vue({
         name: "",
         judge: "",
         secret: "",
+        secretType: "ww",
         definition: "",
         isHosting: false,
         players: [],
@@ -35,6 +36,12 @@ new Vue({
                         self.secret = response.value;
                     }
                     break;
+                case "type":
+                    if (self.judge !== self.name) {
+                        self.secretType = response.value;
+                    }
+                    console.log("The type is now: ", self.secretType)
+                    break;
                 case "definition":
                     self.definitions[response.value.name] = response.value.definition
                     if (self.judge === self.name) {
@@ -46,6 +53,26 @@ new Vue({
                     break;
             }
         });
+    },
+
+    computed: {
+        category() {
+            if (this.secretType === "ww") {
+                return "Weird Words - "
+            }
+            if (this.secretType === "pp") {
+                return "Peculiar People - "
+            }
+            if (this.secretType === "ii") {
+                return "Incredible Initials - "
+            }
+            if (this.secretType === "mm") {
+                return "Marvelous Movies - "
+            }
+            if (this.secretType === "ll") {
+                return "Laughable Laws - "
+            }
+        }
     },
 
     methods: {
@@ -105,6 +132,16 @@ new Vue({
                     JSON.stringify({
                         type: "secret",
                         incomingString: this.secret
+                    })
+                )
+            }
+        },
+        secretType() {
+            if (this.judge === this.name) {
+                this.ws.send(
+                    JSON.stringify({
+                        type: "type",
+                        incomingString: this.secretType
                     })
                 )
             }

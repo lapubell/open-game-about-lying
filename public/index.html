@@ -32,7 +32,15 @@
                     <div class="col-12">
                         <h1>You are the judge!</h1>
                         <p>What is everyone lying about?</p>
-                        <input type="text" v-model="secret" />
+                        <label for="cat">Category: <select v-model="secretType" id="cat">
+                            <option value="ww">Weird Word</option>
+                            <option value="pp">Peculiar People</option>
+                            <option value="ii">Incredible Initials</option>
+                            <option value="mm">Marvelous Movies</option>
+                            <option value="ll">Laughable Laws</option>
+                        </select></label><br />
+                        <label for="secret">Text:
+                            <input type="text" v-model="secret" /></label>
                         <p>What is the real definition?</p>
                         <textarea v-model="definition">
 
@@ -43,14 +51,15 @@
                                 {{ definition }}
                             </li>
                         </ul>
-                        <button @click="shuffle">Shuffle</button>
+                        <!-- <button @click="shuffle">Shuffle</button> -->
                         <button @click="doneJudging">I'm done judging</button>
                     </div>
                 </template>
                 <template v-else>
                     <div class="col-12">
                         <p v-if="judge">Judge: {{ judge }}</p>
-                        <h1>What is your definition for: {{secret}}</h1>
+                        <h1>What is your definition for:</h1>
+                        <h2>{{ category }}{{secret}}</h2>
                         <textarea v-model="definition"></textarea>
                     </div>
                 </template>
@@ -63,7 +72,7 @@
                     <p>Who are you?</p>
                 </div>
                 <div class="input-field col">
-                    <input type="text" v-model.trim="name" placeholder="Your Name">
+                    <input type="text" v-model.trim="name" @keydown.enter="join()" placeholder="Your Name">
                 </div>
                 <div class="text-center pt-5">
                     <button class="btn btn-primary" @click="join()">Join</button>
