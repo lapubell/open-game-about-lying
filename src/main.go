@@ -1,14 +1,15 @@
 package main
 
 import (
+	"fmt"
 	"log"
 	"net/http"
 
 	"github.com/gorilla/websocket"
 )
 
-var clients = make(map[*websocket.Conn]bool) // connected clients
-var broadcast = make(chan Message)           // broadcast channel
+var clients = make(map[*websocket.Conn]string) // connected clients
+var broadcast = make(chan Message)             // broadcast channel
 
 // Configure the upgrader
 var upgrader = websocket.Upgrader{
@@ -50,7 +51,7 @@ func handleConnections(w http.ResponseWriter, r *http.Request) {
 	defer ws.Close()
 
 	// Register our new client
-	clients[ws] = true
+	clients[ws] = ""
 
 	for {
 		var msg Message
@@ -59,8 +60,18 @@ func handleConnections(w http.ResponseWriter, r *http.Request) {
 		if err != nil {
 			log.Printf("error: %v", err)
 			delete(clients, ws)
+
+			leaveMsg := Message{
+				Type: "join",
+				Name: "bye bye",
+			}
+			broadcast <- leaveMsg
 			break
 		}
+
+		clients[ws] = msg.Name
+		fmt.Println(msg.Name + " joined")
+
 		// Send the newly received message to the broadcast channel
 		broadcast <- msg
 	}
@@ -71,8 +82,7 @@ func handleMessages() {
 		// Grab the next message from the broadcast channel
 		msg := <-broadcast
 		if msg.Type == "join" {
-			players = append(players, msg.Name)
-			sendToAll("players", players)
+			sendToAll("players", getPlayers())
 		}
 		if msg.Type == "judge" {
 			sendToAll("judge", msg.IncomingString)
@@ -110,4 +120,12 @@ func sendToAll(t string, message interface{}) {
 			delete(clients, client)
 		}
 	}
+}
+
+func getPlayers() []string {
+	output := []string{}
+	for _, name := range clients {
+		output = append(output, name)
+	}
+	return output
 }

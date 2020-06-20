@@ -13,7 +13,7 @@
 <header class="navbar navbar-expand navbar-dark flex-column flex-md-row bd-navbar">
     <nav>
         <div class="nav-wrapper">
-            <a href="/" class="brand-logo">&nbsp;Let's lie to each other</a>
+            <h1>&nbsp;Let's lie to each other</h1>
         </div>
     </nav>
 </header>
@@ -80,6 +80,19 @@
             </div>
         </div>
 
+        <div class="row" v-if="players.length > 0">
+            <div class="col-12">
+                Players:
+                <ul class="players">
+                    <li v-for="(player, index) in players">
+                        {{ player }}
+                    </li>
+                </ul>
+            </div>
+        </div>
+
+    </div>
+    </div>
     </div>
 </main>
 

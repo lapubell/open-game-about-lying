@@ -12,6 +12,7 @@ new Vue({
         isHosting: false,
         players: [],
         definitions: {},
+        isPlaying: false
     },
 
     created: function() {
@@ -76,6 +77,16 @@ new Vue({
     },
 
     methods: {
+        play() {
+            console.log("start playing")
+            document.getElementById("video").play()
+            this.isPlaying = true
+        },
+        pause() {
+            console.log("pause video")
+            document.getElementById("video").pause()
+            this.isPlaying = false
+        },
         send() {
             if (this.newMsg != '') {
                 this.ws.send(
